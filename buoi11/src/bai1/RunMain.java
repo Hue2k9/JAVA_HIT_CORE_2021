@@ -9,7 +9,8 @@ import java.util.List;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
+import java.util.Date;
+import java.text.SimpleDateFormat;
 public class RunMain {
     static List<Account> accounts = new ArrayList<>();
     public static void main(String[] args) throws IOException {
@@ -30,6 +31,10 @@ public class RunMain {
                 case 1:{
                     Account acc=new Account();
                     acc.input();
+                    Date date=new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+                    String strDate = formatter.format(date);
+                    acc.setCreateAt(strDate);
                     accounts.add(acc);
                     printWriter.println(acc.getId() + "| "+acc.getPassword());
                     break;

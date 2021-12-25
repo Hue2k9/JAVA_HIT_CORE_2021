@@ -118,8 +118,10 @@ public class Account implements Comparable<Account>{
             System.out.print("Phone: ");
             phone=sc.nextLine();
         }
+        /*
         System.out.print("Create at: ");
         createAt=sc.nextLine();
+         */
     }
 
     @Override
