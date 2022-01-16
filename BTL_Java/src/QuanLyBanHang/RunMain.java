@@ -1,6 +1,7 @@
 package QuanLyBanHang;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 public class RunMain {
     public static void main(String[] args) throws SQLException {
@@ -8,34 +9,8 @@ public class RunMain {
         Scanner sc=new Scanner(System.in);
          ArrayList<Product> listProduct =new ArrayList<Product>();
 
-
-
-       //Connect to Sql Server
          Connection conn=SqlServerConnection.getJDBCConnection();
-         Statement statement=conn.createStatement();
-
-         //1. read data: select
-         String sqlSelect = "select * from Product";
-         ResultSet resultSet = statement.executeQuery(sqlSelect);
-         while(resultSet.next()){
-             String s= resultSet.getString(2);
-             System.out.println(s);
-         }
-
-         //2. Insert data: insert
-         String sqlInsert="insert into Product values ('sp08',N'Sach lap trinh C',3,999,'7/5/2020',N'Singaproe')";
-         statement.executeUpdate(sqlInsert);
-
-         //3. update data: update
-        String sqlUpdate ="update Product set nameProduct = N'Lập trình java', price=9, quantity=5 where idProduct = 'sp08'";
-        statement.executeUpdate(sqlUpdate);
-
-        //4. Delete data: delete
-        String sqlDelete ="delete from Product where idProduct = 'sp08'";
-        statement.executeUpdate(sqlDelete);
-
-
-
+         nv.productBase();
 
         int menu;
         do{

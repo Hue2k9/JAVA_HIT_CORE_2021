@@ -1,8 +1,6 @@
 package QuanLyBanHang;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Collections;
-import java.util.Comparator;
+import java.sql.Connection;
+import java.util.*;
 
 public class Manage {
     private ArrayList<NhanVien> listStaff= new ArrayList<NhanVien>();
@@ -10,12 +8,16 @@ public class Manage {
     private ArrayList<Order> listOrder=new ArrayList<Order>();
     Product product=new Product();
     Order order=new Order();
+    Connection conn=SqlServerConnection.getJDBCConnection();
+
     public Manage(ArrayList<NhanVien> listStaff, ArrayList<Product> listProduct, ArrayList<Order> listOrder) {
         this.listStaff = listStaff;
         this.listProduct = listProduct;
         this.listOrder = listOrder;
     }
     public Manage(){};
+
+
     //Them nhan vien
     public void insertStaff(){
         NhanVien nv=new NhanVien();
@@ -53,21 +55,48 @@ public class Manage {
             }
         }
     }
-    public void insertProduct(){
+    public void productBase(){
+        //San pham
+        List<Product> products=SQLProcessing.readAllProduct();
+        for(Product s : products){
+            listProduct.add(s);
+        }
+        for(Product s: listProduct){
+            String id=s.getIdProduct().trim();
+            String day=s.getDayAdded().trim();
+            s.setIdProduct(id);
+            s.setDayAdded(day);
+        }
+    }
+    public void insertProduct() {
         Product sp=new Product();
         sp.input();
-        listProduct.add(sp);
+        SQLProcessing sql=new SQLProcessing();
+        if (sql.addProducttoSQL(sp)){
+            System.out.println("Add product success");
+            listProduct.add(sp);
+        }else{
+            System.out.println("Product's ID cannot be duplicated!");
+        }
     }
     public void deleteProduct(){
         Scanner sc=new Scanner(System.in);
         System.out.print("Enter code product: ");
-        int idProduct=sc.nextInt();
+        String idProduct=sc.nextLine();
+        int k=0;
         for(Product sp: listProduct){
-            if (sp.getIdProduct().equals(idProduct)){
+            if (sp.getIdProduct().equalsIgnoreCase(idProduct)){
                 boolean isRemove=listProduct.remove(sp);
+                k=SQLProcessing.deleteProduct(sp.getIdProduct());
                 break;
             }
         }
+        if (k==-1){
+            System.out.println("Product ID is invalid!");
+        }else{
+            System.out.println("The product has been removed.");
+        }
+
     }
     public void findProduct(){
         Scanner sc=new Scanner(System.in);
@@ -118,20 +147,23 @@ public class Manage {
         Scanner sc=new Scanner(System.in);
         System.out.print("Enter code product: ");
         String idProduct=sc.nextLine();
-        int count=0;
+        SQLProcessing sql=new SQLProcessing();
+        int price;
+        int k=0;
         for(Product sp: listProduct){
             if (sp.getIdProduct().equals(idProduct)){
                 System.out.print("Enter the new price: ");
-                int price=sc.nextInt();
+                price=sc.nextInt();
                 sc.nextLine();
                 sp.setPrice(price);
-            }
-            else{
-                count++;
+                k=SQLProcessing.updateProduct(idProduct,price);
             }
         }
-        if (count==listProduct.size())
-            System.out.println("Does not find the product");
+        if (k==-1)
+            System.out.println("Product Id is invalid!");
+        else
+            System.out.println("The price of the product has been updated.");
+
     }
 
     //Quan ly don hang
