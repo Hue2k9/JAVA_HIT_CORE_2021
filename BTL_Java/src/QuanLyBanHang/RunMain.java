@@ -10,7 +10,7 @@ public class RunMain {
          ArrayList<Product> listProduct =new ArrayList<Product>();
 
          Connection conn=SqlServerConnection.getJDBCConnection();
-         nv.productBase();
+         nv.Base();
 
         int menu;
         do{
@@ -60,6 +60,7 @@ public class RunMain {
                         System.out.println("2. Find product");
                         System.out.println("3. Delete product");
                         System.out.println("4. Fix product selling price");
+                        System.out.println("5. Display product list");
                         System.out.println("5. Display product list by selling price");
                         System.out.println("6. Display product list by quantity");
                         System.out.println("7. Exit");

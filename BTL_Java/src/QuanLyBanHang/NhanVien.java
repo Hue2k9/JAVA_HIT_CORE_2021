@@ -3,26 +3,40 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Collections;
 import java.util.Comparator;
-public class NhanVien {
+public class NhanVien implements Comparable<NhanVien>{
     private String idStaff;
     private String name;
     private int age;
     private String gender;
     private String address;
     private int totalDays; //Tổng số ngày làm việc
+    private int phoneNumber;
     private ArrayList<String> listStaff = new ArrayList<>();
 
-    public NhanVien(String name, int age, String gender, String address, String idStaff, int totalDays, ArrayList<String> listStaff) {
+    public NhanVien(String idStaff, String name, int age, String gender, String address, int totalDays, int phoneNumber) {
+        this.idStaff = idStaff;
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.address = address;
-        this.idStaff = idStaff;
         this.totalDays = totalDays;
+        this.phoneNumber = phoneNumber;
+
+    }
+
+    public NhanVien(ArrayList<String> listStaff) {
         this.listStaff = listStaff;
     }
 
     public NhanVien() {
+    }
+
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getName() {
@@ -96,6 +110,10 @@ public class NhanVien {
         address=sc.nextLine();
         System.out.print("Total of working days: ");
         totalDays=sc.nextInt();
+        sc.nextLine();
+        System.out.println("Phone number: ");
+        phoneNumber=sc.nextInt();
+        sc.nextLine();
     }
 
     public void output(){
@@ -117,6 +135,12 @@ public class NhanVien {
                 ", gender='" + gender + '\'' +
                 ", address='" + address + '\'' +
                 ", totalDays=" + totalDays +
+                ", phoneNumber=" + phoneNumber +
                 '}';
+    }
+
+    @Override
+    public int compareTo(NhanVien o) {
+        return 0;
     }
 }

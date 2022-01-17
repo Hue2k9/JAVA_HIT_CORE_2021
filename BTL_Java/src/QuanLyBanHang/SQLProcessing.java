@@ -8,6 +8,7 @@ public class SQLProcessing {
     static Connection conn = SqlServerConnection.getJDBCConnection();
     static Statement statement;
     Product sp=new Product();
+    NhanVien nv=new NhanVien();
     static {
         try {
             statement = conn.createStatement();
@@ -33,17 +34,7 @@ public class SQLProcessing {
         }
         return false;
     }
-    /*
-    public static void updateProduct(String idProduct, String name, int quantity, int price, String dayAdded, String origin){
-        String sqlUpdate=
-                "update Product set name = N'"+name+"'," +
-                        "quantity = "+quantity+
-                        "',price="+price+
-                        "',dayadded =" +dayAdded+
-                        "',origin = "+origin+
-                        " where idProduct ='"+idProduct+"'";
-    }
-     */
+
     public static int updateProduct(String idProduct,int price){
         String sqlUpdate="update Product set price="+price+" where idProduct='"+idProduct+"'";
         try {
@@ -83,4 +74,60 @@ public class SQLProcessing {
         }
         return products;
     }
+    // ============Staff===========
+    public boolean addStaffToSQL(NhanVien nv){
+        String sql="insert into NhanVien(idStaff,nameStaff,age,gender,addressStaff,totalDays,phoneNumber)"
+                +"values(?,?,?,?,?,?,?)";
+        try {
+            PreparedStatement ps=conn.prepareStatement(sql);
+            ps.setString(1,nv.getIdStaff());
+            ps.setString(2,nv.getName());
+            ps.setInt(3,nv.getAge());
+            ps.setString(4,nv.getGender());
+            ps.setString(5,nv.getAddress());
+            ps.setInt(6,nv.getTotalDays());
+            ps.setInt(7,nv.getPhoneNumber());
+          return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static int deleteStaff(String idStaff){
+        String sqlDelete = "delete NhanVien where idStaff='"+idStaff+"'";
+        try{
+            return statement.executeUpdate(sqlDelete);
+        } catch (SQLException e){
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public static List<NhanVien> readAllStaff(){
+        List<NhanVien> nhanViens = new ArrayList<>();
+        String sql="select * from NhanVien";
+        try {
+            ResultSet resultSet=statement.executeQuery(sql);
+           while (resultSet.next()){
+               NhanVien nhanVien=new NhanVien(
+                 resultSet.getString(1),
+                 resultSet.getString(2),
+                 resultSet.getInt(3),
+                 resultSet.getString(4),
+                 resultSet.getString(5),
+                 resultSet.getInt(6),
+                 resultSet.getInt(7)
+               );
+               nhanViens.add(nhanVien);
+           }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nhanViens;
+    }
+
+    //Orders
+
+
 }

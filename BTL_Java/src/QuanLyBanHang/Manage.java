@@ -8,6 +8,7 @@ public class Manage {
     private ArrayList<Order> listOrder=new ArrayList<Order>();
     Product product=new Product();
     Order order=new Order();
+    NhanVien nhanVien = new NhanVien();
     Connection conn=SqlServerConnection.getJDBCConnection();
 
     public Manage(ArrayList<NhanVien> listStaff, ArrayList<Product> listProduct, ArrayList<Order> listOrder) {
@@ -22,13 +23,20 @@ public class Manage {
     public void insertStaff(){
         NhanVien nv=new NhanVien();
         nv.input();
-        listStaff.add(nv);
+        SQLProcessing sql=new SQLProcessing();
+        if(sql.addStaffToSQL(nv)){
+            listStaff.add(nv);
+            System.out.println("The staff is added!");
+        }
+        else{
+            System.out.println("Staff's Id cannot be duplicated!");
+        }
     }
     //Hien thi danh sach nhan vien
     public void displayListStaff(){
         Scanner sc=new Scanner(System.in);
         for(NhanVien nv : listStaff){
-            nv.toString();
+            System.out.println(nv.toString());
         }
     }
     //Xoa nhan vien
@@ -36,12 +44,18 @@ public class Manage {
         Scanner sc=new Scanner(System.in);
         System.out.print("Enter id staff: ");
         String idStaff=sc.nextLine();
+        int k=0;
         for(NhanVien nv: listStaff){
             if (nv.getIdStaff().equalsIgnoreCase(idStaff)){
                 boolean isRemove=listStaff.remove(nv);
+                k=SQLProcessing.deleteStaff(nv.getIdStaff());
                 break;
             }
         }
+        if (k==-1)
+            System.out.println("Staff's ID is invalid!");
+        else
+            System.out.println("The staff has been removed.");
     }
     //Tìm nhân viên theo tên
     public void findStaff(){
@@ -55,7 +69,7 @@ public class Manage {
             }
         }
     }
-    public void productBase(){
+    public void Base(){
         //San pham
         List<Product> products=SQLProcessing.readAllProduct();
         for(Product s : products){
@@ -67,6 +81,15 @@ public class Manage {
             s.setIdProduct(id);
             s.setDayAdded(day);
         }
+        //Nhan vien
+        List<NhanVien> nhanViens =SQLProcessing.readAllStaff();
+       for(NhanVien s: nhanViens){
+           listStaff.add(s);
+       }
+       for(NhanVien s : listStaff){
+           String id=s.getIdStaff().trim();
+           s.setIdStaff(id);
+       }
     }
     public void insertProduct() {
         Product sp=new Product();
@@ -170,13 +193,26 @@ public class Manage {
     public void addOrder(){
         Order or=new Order();
         or.inputOrder();
+        int quantity;
+        int check=0;
         for(Product p:listProduct){
             if (or.getCodeProduct().equalsIgnoreCase(p.getIdProduct())){
-              or.setSumMoney(or.getQuantity()*p.getPrice());
+              quantity=p.getQuantity()-or.getQuantity();
+              if(quantity>0){
+                  or.setSumMoney(or.getQuantity()*p.getPrice());
+                  System.out.println("1 order has been created.");
+                  listOrder.add(or);
+              }else{
+                  System.out.println("The number of available items is not enough");
+              }
+              check=1;
                 break;
             }
         }
-        listOrder.add(or);
+        if (check==0){
+            System.out.println("ID product is invalid.");
+        }
+
     }
     public void displayOrder(){
         for(Order or: listOrder)

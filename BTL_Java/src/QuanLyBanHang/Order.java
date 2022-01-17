@@ -10,18 +10,18 @@ public class Order implements Comparable<Order>{
     private String codeProduct;
     private String dayAdded;
     private int sumMoney;
-    private String idStaff;
 
     public Order() {
     }
 
-    public Order(String orderCode, String receiver, String address, int quantity, int phoneNumber, String codeProduct, int sumMoney) {
+    public Order(String orderCode, String receiver, String address, int quantity, int phoneNumber, String codeProduct, String dayAdded, int sumMoney) {
         this.orderCode = orderCode;
         this.receiver = receiver;
         this.address = address;
         this.quantity = quantity;
         this.phoneNumber = phoneNumber;
         this.codeProduct = codeProduct;
+        this.dayAdded = dayAdded;
         this.sumMoney = sumMoney;
     }
 
@@ -89,13 +89,6 @@ public class Order implements Comparable<Order>{
         this.dayAdded = dayAdded;
     }
 
-    public String getIdStaff() {
-        return idStaff;
-    }
-
-    public void setIdStaff(String idStaff) {
-        this.idStaff = idStaff;
-    }
 
     public void inputOrder(){
         Scanner sc=new Scanner(System.in);
@@ -115,8 +108,7 @@ public class Order implements Comparable<Order>{
         System.out.print("Quantity: ");
         quantity=sc.nextInt();
         sc.nextLine();
-        System.out.print("Id staff: ");
-        idStaff=sc.nextLine();
+
     }
 
     @Override
@@ -130,7 +122,6 @@ public class Order implements Comparable<Order>{
                 ", codeProduct='" + codeProduct + '\'' +
                 ", dayAdded='" + dayAdded + '\'' +
                 ", sumMoney=" + sumMoney +
-                ", idStaff='" + idStaff + '\'' +
                 '}';
     }
 
