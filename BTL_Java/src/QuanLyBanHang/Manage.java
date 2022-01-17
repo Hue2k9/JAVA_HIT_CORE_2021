@@ -143,14 +143,31 @@ public class Manage {
         }
     }
     //Sap xep theo chieu tang dan gia ban
-    public void sortProductByPrice(){
+    public void sortProductByPriceIncrease(){
         Collections.sort(listProduct);
         for(Product sp: listProduct){
             System.out.println(sp.toString());
         }
     }
-    //Sap xep theo giam dan so luong
-    public void sortProductByQuantity(){
+    //Sắp xếp theo chiều giảm dần giá bán
+    public void sortProductByPriceDecrease(){
+        Collections.sort(listProduct, new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                if (o1.getPrice()>o2.getPrice())
+                    return -1;
+                else if (o1.getPrice()<o2.getPrice())
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+        for(Product sp: listProduct){
+            System.out.println(sp.toString());
+        }
+    }
+    //Hiển thị sản phẩm số lượng giám dần
+    public void sortProductByQuantityDecrease(){
         Collections.sort(listProduct, new Comparator<Product>() {
             @Override
             public int compare(Product o1, Product o2) {
@@ -166,6 +183,24 @@ public class Manage {
             System.out.println(sp.toString());
         }
     }
+    //Hiển thị sản phẩm số lượng tăng dần
+    public void sortProductByQuantityIncrease(){
+        Collections.sort(listProduct, new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                if (o1.getQuantity()> o2.getQuantity())
+                    return 1;
+                else if (o1.getQuantity()<o2.getQuantity())
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+        for(Product sp: listProduct){
+            System.out.println(sp.toString());
+        }
+    }
+
     public void editThePrice(){
         Scanner sc=new Scanner(System.in);
         System.out.print("Enter code product: ");
@@ -186,7 +221,6 @@ public class Manage {
             System.out.println("Product Id is invalid!");
         else
             System.out.println("The price of the product has been updated.");
-
     }
 
     //Quan ly don hang

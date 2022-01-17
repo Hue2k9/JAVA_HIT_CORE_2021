@@ -59,11 +59,9 @@ public class RunMain {
                         System.out.println("1. Insert product");
                         System.out.println("2. Find product");
                         System.out.println("3. Delete product");
-                        System.out.println("4. Fix product selling price");
+                        System.out.println("4. Edit the price of the product");
                         System.out.println("5. Display product list");
-                        System.out.println("5. Display product list by selling price");
-                        System.out.println("6. Display product list by quantity");
-                        System.out.println("7. Exit");
+                        System.out.println("6. Exit");
                         System.out.print("Enter your choose: ");
                         list=sc.nextInt();
                         switch (list){
@@ -84,15 +82,64 @@ public class RunMain {
                                 break;
                             }
                             case 5:{
-                                nv.sortProductByPrice();
-                                break;
+                                int k;
+                                do{
+                                    System.out.println("1. Show products by price");
+                                    System.out.println("2. Show products by quantity");
+                                    System.out.println("3. Exit");
+                                    System.out.print("Enter your choose: ");
+                                    k=sc.nextInt();
+                                    sc.nextLine();
+                                    switch (k){
+                                        case 1:{
+                                            int m;
+                                            do{
+                                                System.out.println("1. The price increase?");
+                                                System.out.println("2. The price decrease?");
+                                                System.out.println("3. Exit");
+                                                System.out.print("Enter your choose: ");
+                                                m=sc.nextInt();
+                                                sc.nextLine();
+                                              switch (m){
+                                                  case 1:{
+                                                      nv.sortProductByPriceIncrease();
+                                                      break;
+                                                  }
+                                                  case 2:{
+                                                      nv.sortProductByPriceDecrease();
+                                                  }
+                                              }
+                                            } while(m!=3);
+                                            break;
+                                        }
+                                        case 2:{
+                                            int m;
+                                            do{
+                                                System.out.println("1. Increase? ");
+                                                System.out.println("2. decrease? ");
+                                                System.out.println("3. Exit");
+                                                System.out.print("Enter your choose: ");
+                                                m=sc.nextInt();
+                                                sc.nextLine();
+                                                switch (m){
+                                                    case 1:{
+                                                        nv.sortProductByQuantityIncrease();
+                                                        break;
+                                                    }
+                                                    case 2:{
+                                                        nv.sortProductByQuantityDecrease();
+                                                    }
+                                                }
+                                            } while(m!=3);
+                                            break;
+                                        }
+                                    }
+                                } while(k!=3);
+                               break;
                             }
-                            case 6:{
-                                nv.sortProductByQuantity();
-                                break;
-                            }
+
                         }
-                    } while(list!=7);
+                    } while(list!=6);
                     break;
                 }
                 case 3:{
