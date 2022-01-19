@@ -7,6 +7,8 @@ public class Order implements Comparable<Order>{
     private String address;
     private int quantity;
     private int phoneNumber;
+    private int n;
+    ArrayList<Product> listProduct=new ArrayList<>();
     private String codeProduct;
     private String dayAdded;
     private int sumMoney;
@@ -101,14 +103,36 @@ public class Order implements Comparable<Order>{
         System.out.print("Phone number: ");
         phoneNumber=sc.nextInt();
         sc.nextLine();
-        System.out.print("Code product: ");
-        codeProduct=sc.nextLine();
         System.out.print("Day added: ");
         dayAdded=sc.nextLine();
-        System.out.print("Quantity: ");
-        quantity=sc.nextInt();
         sc.nextLine();
-
+        System.out.println("Nhap so loai san pham: ");
+        n=sc.nextInt();
+        for(int i=0; i<n; i++){
+            Product sp1 = new Product();
+            System.out.print("Enter code product: ");
+            String codeProduct=sc.nextLine();
+            int count=0;
+            for(Product sp:listProduct){
+                if (sp.getIdProduct().equals(codeProduct)){
+                  count=1;
+                    System.out.print("Quantity Product: ");
+                    quantity=sc.nextInt();
+                  break;
+                }
+                else
+                    count++;
+            }
+            if (count==listProduct.size())
+                System.out.println("The product is not available");
+        }
+    }
+    public void outPutOrder(){
+        System.out.println("Order code: "+orderCode);
+        System.out.println("Receiver: "+receiver);
+        System.out.println("Address: "+address);
+        System.out.println("Phone number: "+phoneNumber);
+        System.out.println("Day added: "+dayAdded);
     }
 
     @Override
@@ -129,4 +153,5 @@ public class Order implements Comparable<Order>{
     public int compareTo(Order o) {
         return 0;
     }
+
 }

@@ -12,6 +12,7 @@ public class RunMain {
          Connection conn=SqlServerConnection.getJDBCConnection();
          nv.Base();
 
+
         int menu;
         do{
             System.out.println("=====MANAGE=====");
@@ -147,7 +148,7 @@ public class RunMain {
                     do{
                         System.out.println("1. Insert order");
                         System.out.println("2. Delete order");
-                        System.out.println("3. edit order");
+                        System.out.println("3. Edit order");
                         System.out.println("4. Display sum of orders");
                         System.out.println("5. Display order list");
                         System.out.println("6. Find order by receiver address");
@@ -168,7 +169,7 @@ public class RunMain {
                                 break;
                             }
                             case 4:{
-
+                                nv.sumOfOrder();
                                 break;
                             }
                             case 5:{

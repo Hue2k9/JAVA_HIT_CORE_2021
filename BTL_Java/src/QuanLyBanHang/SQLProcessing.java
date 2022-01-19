@@ -18,16 +18,15 @@ public class SQLProcessing {
     }
 
     public boolean addProducttoSQL(Product sp){
-        String sql="insert into Product(idProduct,nameProduct,quantity,price,dayAdded,origin)"
-                +"values(?,?,?,?,?,?)";
+        String sql="insert into Product(nameProduct,quantity,price,dayAdded,origin)"
+                +"values(?,?,?,?,?)";
         try{
             PreparedStatement ps=conn.prepareStatement(sql);
-            ps.setString(1,sp.getIdProduct());
-            ps.setString(2,sp.getName());
-            ps.setInt(3,sp.getQuantity());
-            ps.setInt(4,sp.getPrice());
-            ps.setString(5,sp.getDayAdded());
-            ps.setString(6,sp.getOrigin());
+            ps.setString(1,sp.getName());
+            ps.setInt(2,sp.getQuantity());
+            ps.setInt(3,sp.getPrice());
+            ps.setString(4,sp.getDayAdded());
+            ps.setString(5,sp.getOrigin());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,17 +75,16 @@ public class SQLProcessing {
     }
     // ============Staff===========
     public boolean addStaffToSQL(NhanVien nv){
-        String sql="insert into NhanVien(idStaff,nameStaff,age,gender,addressStaff,totalDays,phoneNumber)"
-                +"values(?,?,?,?,?,?,?)";
+        String sql="insert into NhanVien(nameStaff,age,gender,addressStaff,totalDays,phoneNumber)"
+                +"values(?,?,?,?,?,?)";
         try {
             PreparedStatement ps=conn.prepareStatement(sql);
-            ps.setString(1,nv.getIdStaff());
-            ps.setString(2,nv.getName());
-            ps.setInt(3,nv.getAge());
-            ps.setString(4,nv.getGender());
-            ps.setString(5,nv.getAddress());
-            ps.setInt(6,nv.getTotalDays());
-            ps.setInt(7,nv.getPhoneNumber());
+            ps.setString(1,nv.getName());
+            ps.setInt(2,nv.getAge());
+            ps.setString(3,nv.getGender());
+            ps.setString(4,nv.getAddress());
+            ps.setInt(5,nv.getTotalDays());
+            ps.setInt(6,nv.getPhoneNumber());
           return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -127,7 +125,68 @@ public class SQLProcessing {
         return nhanViens;
     }
 
-    //Orders
+    //============Orders============
+    public boolean addOrderToSQL(Order or){
+        String sql="insert into Orders(orderCode,receiver,addressClient,quantity,phoneNumber,idProduct,dayAdded)"
+                +"values(?,?,?,?,?,?,?)";
+        try{
+            PreparedStatement ps=conn.prepareStatement(sql);
+            ps.setString(1,or.getOrderCode());
+            ps.setString(2,or.getReceiver());
+            ps.setString(3,or.getAddress());
+            ps.setInt(4,or.getQuantity());
+            ps.setInt(5,or.getPhoneNumber());
+            ps.setString(6,or.getCodeProduct());
+            ps.setString(7,or.getDayAdded());
+          //  ps.setInt(7,or.getSumMoney());
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static int updateOrder(String orderCode, String receiver, String address, int quantity, int phone, String codeProduct,String dayAdded, int sumMoney){
+        String sqlUpdate="update Orders set price='"+orderCode+"','"+receiver+"','"+address+"','"+quantity+"','"+phone+"','"+codeProduct+"','"+dayAdded+"','"+sumMoney+"'";
+        try{
+            return statement.executeUpdate(sqlUpdate);
+        }catch (SQLException e){
+            e.printStackTrace();
+            return -1;
+        }
+    }
+    public static int deleteOrder(String orderCode){
+        String sqlDelete="delete Orders where orderCode='"+orderCode+"'";
+        try {
+            return statement.executeUpdate(sqlDelete);
+        } catch (SQLException e){
+            e.printStackTrace();
+            return -1;
+        }
+    }
+    public static List<Order> readAllOrder(){
+        List<Order> orders = new ArrayList<>();
+        String sql="select * from Orders";
+        try{
+            ResultSet resultSet=statement.executeQuery(sql);
+            while (resultSet.next()){
+                Order order=new Order(
+                  resultSet.getString(1),
+                  resultSet.getString(2),
+                  resultSet.getString(3),
+                  resultSet.getInt(4),
+                  resultSet.getInt(5),
+                  resultSet.getString(6),
+                  resultSet.getString(7),
+                  resultSet.getInt(8)
+                );
+                orders.add(order);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
 
 
 }

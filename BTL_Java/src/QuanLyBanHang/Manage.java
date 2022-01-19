@@ -1,7 +1,7 @@
 package QuanLyBanHang;
 import java.sql.Connection;
 import java.util.*;
-
+import java.util.Formatter;
 public class Manage {
     private ArrayList<NhanVien> listStaff= new ArrayList<NhanVien>();
     private ArrayList<Product> listProduct =new ArrayList<Product>();
@@ -25,7 +25,15 @@ public class Manage {
         nv.input();
         SQLProcessing sql=new SQLProcessing();
         if(sql.addStaffToSQL(nv)){
-            listStaff.add(nv);
+            List<NhanVien> nhanViens =SQLProcessing.readAllStaff();
+            listStaff.removeAll(listStaff);
+            for(NhanVien s: nhanViens){
+                listStaff.add(s);
+            }
+            for(NhanVien s : listStaff){
+                String id=s.getIdStaff().trim();
+                s.setIdStaff(id);
+            }
             System.out.println("The staff is added!");
         }
         else{
@@ -35,8 +43,10 @@ public class Manage {
     //Hien thi danh sach nhan vien
     public void displayListStaff(){
         Scanner sc=new Scanner(System.in);
+        System.out.printf("%-25s%-15s%-10s%-25s%-10s%-20s\n","Staff name","Staff's ID","Age","Address","Total day","Salary");
+
         for(NhanVien nv : listStaff){
-            System.out.println(nv.toString());
+            nv.output();
         }
     }
     //Xoa nhan vien
@@ -90,6 +100,18 @@ public class Manage {
            String id=s.getIdStaff().trim();
            s.setIdStaff(id);
        }
+       //Đơn hàng
+        List<Order> orders = SQLProcessing.readAllOrder();
+       for(Order s : orders){
+           listOrder.add(s);
+       }
+
+       for(Order s : listOrder){
+           String orderCode=s.getOrderCode().trim();
+           String orderCodeProduct = s.getCodeProduct().trim();
+           s.setOrderCode(orderCode);
+           s.setCodeProduct(orderCodeProduct);
+       }
     }
     public void insertProduct() {
         Product sp=new Product();
@@ -97,7 +119,18 @@ public class Manage {
         SQLProcessing sql=new SQLProcessing();
         if (sql.addProducttoSQL(sp)){
             System.out.println("Add product success");
-            listProduct.add(sp);
+          //  listProduct.add(sp);
+            listProduct.removeAll(listProduct);
+            List<Product> products=SQLProcessing.readAllProduct();
+            for(Product s : products){
+                listProduct.add(s);
+            }
+            for(Product s: listProduct){
+                String id=s.getIdProduct().trim();
+                String day=s.getDayAdded().trim();
+                s.setIdProduct(id);
+                s.setDayAdded(day);
+            }
         }else{
             System.out.println("Product's ID cannot be duplicated!");
         }
@@ -138,15 +171,17 @@ public class Manage {
     }
     public void displayListProduct(){
         Scanner sc=new Scanner(System.in);
+        System.out.printf("%-15s%-40s%-15s%-15s%-15s%s\n","Product code","Product name","Quantity","Price","Day added","Origin");
         for(Product sp : listProduct){
-            sp.toString();
+            sp.output();
         }
     }
     //Sap xep theo chieu tang dan gia ban
     public void sortProductByPriceIncrease(){
         Collections.sort(listProduct);
-        for(Product sp: listProduct){
-            System.out.println(sp.toString());
+        System.out.printf("%-15s%-40s%-15s%-15s%-15s%s\n","Product code","Product name","Quantity","Price","Day added","Origin");
+        for(Product sp : listProduct){
+            sp.output();
         }
     }
     //Sắp xếp theo chiều giảm dần giá bán
@@ -162,8 +197,9 @@ public class Manage {
                     return 0;
             }
         });
-        for(Product sp: listProduct){
-            System.out.println(sp.toString());
+        System.out.printf("%-15s%-40s%-15s%-15s%-15s%s\n","Product code","Product name","Quantity","Price","Day added","Origin");
+        for(Product sp : listProduct){
+            sp.output();
         }
     }
     //Hiển thị sản phẩm số lượng giám dần
@@ -179,8 +215,9 @@ public class Manage {
                     return 0;
             }
         });
-        for(Product sp: listProduct){
-            System.out.println(sp.toString());
+        System.out.printf("%-15s%-40s%-15s%-15s%-15s%s\n","Product code","Product name","Quantity","Price","Day added","Origin");
+        for(Product sp : listProduct){
+            sp.output();
         }
     }
     //Hiển thị sản phẩm số lượng tăng dần
@@ -196,8 +233,9 @@ public class Manage {
                     return 0;
             }
         });
-        for(Product sp: listProduct){
-            System.out.println(sp.toString());
+        System.out.printf("%-15s%-40s%-15s%-15s%-15s%s\n","Product code","Product name","Quantity","Price","Day added","Origin");
+        for(Product sp : listProduct){
+            sp.output();
         }
     }
 
@@ -229,28 +267,31 @@ public class Manage {
         or.inputOrder();
         int quantity;
         int check=0;
+        SQLProcessing sql=new SQLProcessing();
+        System.out.println(or);
+
         for(Product p:listProduct){
-            if (or.getCodeProduct().equalsIgnoreCase(p.getIdProduct())){
+            if (or.getCodeProduct().trim().equalsIgnoreCase(p.getIdProduct().trim())){
+                System.out.println();
               quantity=p.getQuantity()-or.getQuantity();
               if(quantity>0){
-                  or.setSumMoney(or.getQuantity()*p.getPrice());
-                  System.out.println("1 order has been created.");
-                  listOrder.add(or);
+                  if (sql.addOrderToSQL(or)){
+                      or.setSumMoney(or.getQuantity()*p.getPrice());
+                      System.out.println("1 order has been created.");
+                      listOrder.add(or);
+                  }
               }else{
                   System.out.println("The number of available items is not enough");
               }
-              check=1;
                 break;
+            }else{
+                System.out.println("The code product is invalid!");
             }
         }
-        if (check==0){
-            System.out.println("ID product is invalid.");
-        }
-
     }
     public void displayOrder(){
         for(Order or: listOrder)
-            System.out.println(or);
+            System.out.println(or.toString());
     }
     public void findAllOrderByAddress(){
         System.out.println("Enter address: ");
@@ -265,12 +306,17 @@ public class Manage {
         Scanner sc=new Scanner(System.in);
         System.out.println("Enter code order: ");
         String orderCode=sc.nextLine();
+        int k=0;
         for(Order or:listOrder){
             if (orderCode.equalsIgnoreCase(or.getOrderCode())){
                 boolean isRemove=listOrder.remove(or);
+                k=SQLProcessing.deleteOrder(or.getOrderCode());
                 break;
             }
         }
+    }
+    public void sumOfOrder(){
+        System.out.println(listOrder.size());
     }
     public void editOrder(){
         int choose;
@@ -284,9 +330,10 @@ public class Manage {
             System.out.println("4. Edit phone number");
             System.out.println("5. Edit code product");
             System.out.println("6. Exit");
-            System.out.println("Enter your choose: ");
+            System.out.print("Enter your choose: ");
             choose=sc.nextInt();
             sc.nextLine();
+
             switch (choose){
                 case 1:{
                     for(Order or:listOrder){
@@ -348,4 +395,5 @@ public class Manage {
             }
         } while(choose!=6);
     }
+
 }

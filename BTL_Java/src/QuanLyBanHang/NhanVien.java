@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Formatter;
 public class NhanVien implements Comparable<NhanVien>{
     private String idStaff;
     private String name;
@@ -11,6 +12,7 @@ public class NhanVien implements Comparable<NhanVien>{
     private String address;
     private int totalDays; //Tổng số ngày làm việc
     private int phoneNumber;
+    private int salary;
     private ArrayList<String> listStaff = new ArrayList<>();
 
     public NhanVien(String idStaff, String name, int age, String gender, String address, int totalDays, int phoneNumber) {
@@ -29,6 +31,14 @@ public class NhanVien implements Comparable<NhanVien>{
     }
 
     public NhanVien() {
+    }
+
+    public int getSalary() {
+        return getTotalDays()*500000;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
     }
 
     public int getPhoneNumber() {
@@ -99,8 +109,6 @@ public class NhanVien implements Comparable<NhanVien>{
         Scanner sc=new Scanner(System.in);
         System.out.print("Staff name: ");
         name=sc.nextLine();
-        System.out.print("Id staff: ");
-        idStaff=sc.nextLine();
         System.out.print("Age: ");
         age=sc.nextInt();
         sc.nextLine();
@@ -117,13 +125,7 @@ public class NhanVien implements Comparable<NhanVien>{
     }
 
     public void output(){
-        System.out.println("Staff name: "+getName());
-        System.out.println("Id staff: "+getIdStaff());
-        System.out.println("Age: "+getAge());
-        System.out.println("Gender: "+getGender());
-        System.out.println("Address: "+getAddress());
-        System.out.println("Total of working days: "+getTotalDays());
-        System.out.println("Salary: "+getTotalDays()*500000+" VND");
+        System.out.printf("%-25s%-15s%-10d%-25s%-10d%-20d\n",getName(),getIdStaff(),getAge(),getAddress(),getTotalDays(),getSalary());
     }
 
     @Override

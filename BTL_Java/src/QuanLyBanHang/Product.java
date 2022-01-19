@@ -1,15 +1,14 @@
 package QuanLyBanHang;
 
 import java.util.Scanner;
-
-public class Product implements Comparable<Product>{
+import java.util.Formatter;
+public class Product  implements Comparable<Product> {
     private String idProduct;
     private String name;
     private int quantity;
     private int price;
     private String dayAdded;
     private String origin;
-
     public Product() {
     }
 
@@ -72,8 +71,10 @@ public class Product implements Comparable<Product>{
 
     public void input(){
         Scanner sc=new Scanner(System.in);
+        /*
         System.out.print("ID product: ");
         idProduct=sc.nextLine();
+         */
         System.out.print("Name product: ");
         name=sc.nextLine();
         System.out.print("Quantity: ");
@@ -89,12 +90,8 @@ public class Product implements Comparable<Product>{
         origin=sc.nextLine();
     }
     public void output(){
-        System.out.println("Id product: "+getIdProduct());
-        System.out.println("Name product: "+getName());
-        System.out.println("Quantity: "+getQuantity());
-        System.out.println("Price: "+getPrice());
-        System.out.println("Day added: "+getDayAdded());
-        System.out.println("Origin: "+getOrigin());
+        System.out.printf("%-15s%-40s%-15d%-15d%-15s%s\n",getIdProduct(),getName(),getQuantity(),getPrice(),getDayAdded(),getOrigin());
+
     }
 
     @Override
