@@ -33,7 +33,15 @@ public class SQLProcessing {
         }
         return false;
     }
-
+    public static int findProduct(String idProduct){
+        String sqlFind="select * from Product where idProduct='"+idProduct+"'";
+        try {
+            return statement.executeUpdate(sqlFind);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
     public static int updateProduct(String idProduct,int price){
         String sqlUpdate="update Product set price="+price+" where idProduct='"+idProduct+"'";
         try {
@@ -51,6 +59,27 @@ public class SQLProcessing {
             e.printStackTrace();
             return -1;
         }
+    }
+    public static List<Product> readProductByCode(String idProduct){
+        List<Product> products = new ArrayList<>();
+        String sql="select * from Product where idProduct='"+idProduct+"'";
+        try{
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()){
+                Product product=new Product(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3),
+                        resultSet.getInt(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6)
+                );
+                products.add(product);
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return products;
     }
     public static List<Product> readAllProduct(){
         List<Product> products = new ArrayList<>();
@@ -127,18 +156,17 @@ public class SQLProcessing {
 
     //============Orders============
     public boolean addOrderToSQL(Order or){
-        String sql="insert into Orders(orderCode,receiver,addressClient,quantity,phoneNumber,idProduct,dayAdded)"
-                +"values(?,?,?,?,?,?,?)";
+        String sql="insert into Orders(receiver,addressClient,quantity,phoneNumber,idProduct,dayAdded)"
+                +"values(?,?,?,?,?,?)";
         try{
             PreparedStatement ps=conn.prepareStatement(sql);
-            ps.setString(1,or.getOrderCode());
-            ps.setString(2,or.getReceiver());
-            ps.setString(3,or.getAddress());
-            ps.setInt(4,or.getQuantity());
-            ps.setInt(5,or.getPhoneNumber());
-            ps.setString(6,or.getCodeProduct());
-            ps.setString(7,or.getDayAdded());
-          //  ps.setInt(7,or.getSumMoney());
+            ps.setString(1,or.getReceiver());
+            ps.setString(2,or.getAddress());
+            ps.setInt(3,or.getQuantity());
+            ps.setInt(4,or.getPhoneNumber());
+            ps.setString(5,or.getCodeProduct());
+            ps.setString(6,or.getDayAdded());
+       //     ps.setInt(7,or.getSumMoney());
         }catch(SQLException e){
             e.printStackTrace();
         }

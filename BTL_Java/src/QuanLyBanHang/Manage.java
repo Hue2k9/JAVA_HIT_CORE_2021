@@ -101,6 +101,7 @@ public class Manage {
            s.setIdStaff(id);
        }
        //Đơn hàng
+        /*
         List<Order> orders = SQLProcessing.readAllOrder();
        for(Order s : orders){
            listOrder.add(s);
@@ -112,6 +113,7 @@ public class Manage {
            s.setOrderCode(orderCode);
            s.setCodeProduct(orderCodeProduct);
        }
+       */
     }
     public void insertProduct() {
         Product sp=new Product();
@@ -265,33 +267,35 @@ public class Manage {
     public void addOrder(){
         Order or=new Order();
         or.inputOrder();
+        listOrder.add(or);
         int quantity;
         int check=0;
         SQLProcessing sql=new SQLProcessing();
-        System.out.println(or);
 
-        for(Product p:listProduct){
-            if (or.getCodeProduct().trim().equalsIgnoreCase(p.getIdProduct().trim())){
-                System.out.println();
-              quantity=p.getQuantity()-or.getQuantity();
-              if(quantity>0){
-                  if (sql.addOrderToSQL(or)){
-                      or.setSumMoney(or.getQuantity()*p.getPrice());
-                      System.out.println("1 order has been created.");
-                      listOrder.add(or);
-                  }
-              }else{
-                  System.out.println("The number of available items is not enough");
-              }
-                break;
-            }else{
-                System.out.println("The code product is invalid!");
+        /*
+        if(sql.addOrderToSQL(or)){
+            System.out.println("Add order successed!");
+            listOrder.removeAll(listOrder);
+            List<Order> orders=SQLProcessing.readAllOrder();
+            for(Order order:listOrder){
+                listOrder.add(order);
+            }
+            for (Order order:listOrder){
+                String orderCode=order.getOrderCode().trim();
+                String productCode=order.getCodeProduct().trim();
+                order.setOrderCode(orderCode);
+                order.setCodeProduct(productCode);
             }
         }
+        else{
+            System.out.println("Add order failed!");
+        }
+*/
+
     }
     public void displayOrder(){
         for(Order or: listOrder)
-            System.out.println(or.toString());
+            or.outPutOrder();
     }
     public void findAllOrderByAddress(){
         System.out.println("Enter address: ");
