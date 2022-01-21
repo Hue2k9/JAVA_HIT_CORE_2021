@@ -6,6 +6,7 @@ public class Manage {
     private ArrayList<NhanVien> listStaff= new ArrayList<NhanVien>();
     private ArrayList<Product> listProduct =new ArrayList<Product>();
     private ArrayList<Order> listOrder=new ArrayList<Order>();
+    private ArrayList<Account> listAccount = new ArrayList<>();
     Product product=new Product();
     Order order=new Order();
     NhanVien nhanVien = new NhanVien();
@@ -18,7 +19,16 @@ public class Manage {
     }
     public Manage(){};
 
-
+    public void addAccountToList(){
+        List<Account> accounts = SQLProcessing.readAllAccount();
+        for(Account s : accounts){
+            String userName=s.getUsername().trim();
+            String passWord=s.getPassword().trim();
+            s.setPassword(passWord);
+            s.setUsername(userName);
+            listAccount.add(s);
+        }
+    }
     //Them nhan vien
     public void insertStaff(){
         NhanVien nv=new NhanVien();

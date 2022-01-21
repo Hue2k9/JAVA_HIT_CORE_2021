@@ -5,25 +5,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Account implements Comparable<Account>{
-    private String fullName;
     private String username;
     private String password;
-    private String email;
+    private String fullName;
     private String phone;
-    private String createAt;
-    static Pattern pattern;
-    static Matcher matcher;
+    private String address;
+    private String email;
 
-    public Account(String fullName, String username, String password, String email, String phone, String createAt) {
-        this.fullName = fullName;
+
+    public Account(String username, String password, String fullName, String phone, String address, String email) {
         this.username = username;
         this.password = password;
-        this.email = email;
+        this.fullName = fullName;
         this.phone = phone;
-        this.createAt = createAt;
+        this.address = address;
+        this.email = email;
     }
 
     public Account() {
+    }
+
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getFullName() {
@@ -67,13 +76,7 @@ public class Account implements Comparable<Account>{
         this.phone = phone;
     }
 
-    public String getCreateAt() {
-        return createAt;
-    }
 
-    public void setCreateAt(String createAt) {
-        this.createAt = createAt;
-    }
     public void input(){
         String regexUserName = "^[a-zA-Z0-9]{6,}$";
         String regexPassword = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$";
@@ -88,18 +91,28 @@ public class Account implements Comparable<Account>{
             System.out.print("Enter user name : ");
             username=sc.nextLine();
         }
-        System.out.print("Pass word: ");
+        System.out.print("Password: ");
         password=sc.nextLine();
         while(!Pattern.matches(regexPassword,password)){
             System.out.print("Enter pass word: ");
             password=sc.nextLine();
         }
+        System.out.print("Enter password again: ");
+        String passwordAgain=sc.nextLine();
+        while (!passwordAgain.equals(password)){
+            System.out.println("Passwords are not the same");
+            System.out.println("Enter password again: ");
+            passwordAgain=sc.nextLine();
+        }
+        /*
         System.out.print("Email: ");
         email=sc.nextLine();
         while (!Pattern.matches(regexEmail,email)){
             System.out.print("Email: ");
             email=sc.nextLine();
         }
+
+         */
         System.out.print("Phone: ");
         phone=sc.nextLine();
         while(!Pattern.matches(regexPhone,phone)){
@@ -108,16 +121,18 @@ public class Account implements Comparable<Account>{
         }
 
     }
+    public void output(){
 
+    }
     @Override
     public String toString() {
         return "Account{" +
-                "fullName='" + fullName + '\'' +
-                ", username='" + username + '\'' +
+                "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", phone='" + phone + '\'' +
-                ", createAt='" + createAt + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 

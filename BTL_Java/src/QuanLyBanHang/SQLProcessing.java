@@ -16,6 +16,62 @@ public class SQLProcessing {
             e.printStackTrace();
         }
     }
+    public static List<Account> readAllAccount(){
+        String sql="select * from users";
+        List<Account> accounts = new ArrayList<>();
+        try {
+            ResultSet resultSet=statement.executeQuery(sql);
+            while (resultSet.next()){
+                Account account=new Account(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6)
+                );
+                accounts.add(account);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return accounts;
+    }
+    public boolean addAccountToSQL(Account acc){
+        String sql="insert into Users(userName,password,name,phoneNumber,address,email)"+
+                "values(?,?,?,?,?,?)";
+        try {
+            PreparedStatement ps=conn.prepareStatement(sql);
+            ps.setString(1,acc.getUsername());
+            ps.setString(2,acc.getPassword());
+            ps.setString(3,acc.getFullName());
+            ps.setString(4,acc.getPhone());
+            ps.setString(5,acc.getAddress());
+            ps.setString(6,acc.getEmail());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public static int findAccount(String userName,String password){
+        String sqlFind="select userName from Users where userName='"+userName+"' and password='"+password+"'";
+        try {
+            return statement.executeUpdate(sqlFind);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+    public static int updateAccount(String password,String name, String phoneNumber, String address, String email){
+        String sqlUpdate="update Users set password='"+password+"', phoneNumber='"+phoneNumber+"',address='"+address+"',email='"+email+"'";
+        try {
+            return statement.executeUpdate(sqlUpdate);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 
     public boolean addProducttoSQL(Product sp){
         String sql="insert into Product(nameProduct,quantity,price,dayAdded,origin)"
@@ -213,4 +269,5 @@ public class SQLProcessing {
         }
         return orders;
     }
+
 }

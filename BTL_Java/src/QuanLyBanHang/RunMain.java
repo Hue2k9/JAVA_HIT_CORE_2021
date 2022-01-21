@@ -10,10 +10,23 @@ public class RunMain {
         ArrayList<Product> listProduct =new ArrayList<Product>();
         Connection conn=SqlServerConnection.getJDBCConnection();
         nv.Base();
-
-
-        int menu;
+        LogIn logIn=new LogIn();
+        int menu1;
         do{
+            nv.addAccountToList();
+            logIn.addAccountToList();
+            System.out.println("1. Sign in");
+            System.out.println("2. Sign up");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choose: ");
+            menu1=sc.nextInt();
+            switch (menu1){
+                case 1:{
+                    int join=logIn.SignIn();
+                    if (join==1){
+                        /* =======Manage========= */
+             int menu;
+             do{
             System.out.println(" _______MANAGE ______");
             System.out.println("|                    |");
             System.out.println("|1. Staff            |");
@@ -212,5 +225,22 @@ public class RunMain {
                 }
             }
         } while(menu!=4);
+          /* =========Manage===========*/
+                    }
+                    else{
+                        menu1=3;
+                    }
+                    break;
+                }
+                case 2:{
+                    logIn.SignUp();
+                    nv.addAccountToList();
+                    break;
+                }
+            }
+        } while (menu1!=3);
+
+
+
     }
 }
