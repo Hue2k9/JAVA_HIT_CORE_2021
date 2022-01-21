@@ -61,17 +61,11 @@ create table NhanVien(
    totalDays int,
    phoneNumber char(11)
 )
+
 create table orders
 (
    orderCode char(10) primary key constraint orderCode_auto default dbo.Auto_Orders_OrderCode(),
-   receiver Nvarchar(Max),
-   addressClient Nvarchar(Max),
-   quantity int,
-   phoneNumber char(11),
-   idProduct char(10),
-   dayAdded char(10)
-   constraint fk_order_idProduct foreign key (idProduct)
-   references Product(idProduct)  
+   userName char(50)
 )
 
 insert into NhanVien values
@@ -85,26 +79,70 @@ insert into NhanVien values
 
 
 insert into Orders values
-(dbo.Auto_Orders_OrderCode(),N'Nguyen Van C','Can Tho',4,'0868299812','sp001','03/01/2022')
+(dbo.Auto_Orders_OrderCode(),'hue2k9')
 insert into Orders values
-(dbo.Auto_Orders_OrderCode(),N'Hoang Minh Hue','Vinh Phuc',5,'0332364705','sp002','09/01/2022')
+(dbo.Auto_Orders_OrderCode(),'hue2k8')
 insert into Orders values
-(dbo.Auto_Orders_OrderCode(),N'Nguyen Van C','Ninh Binh',1,'0332364705','sp007','03/01/2022')
+(dbo.Auto_Orders_OrderCode(),'hue2k9')
 insert into Orders values
-(dbo.Auto_Orders_OrderCode(),N'Hoang Minh Hue','Thai Nguyen',1,'0332364705','sp005','09/01/2022')
+(dbo.Auto_Orders_OrderCode(),'hue2k9')
 insert into Orders values
-(dbo.Auto_Orders_OrderCode(),N'Nguyen Van D','Ha Giang',1,'0868299812','sp007','03/01/2022')
-insert into Orders values
-(dbo.Auto_Orders_OrderCode(),N'Ngoc Anh','Ha Noi',1,'0868299812','sp004','09/01/2022')
-insert into Orders values
-(dbo.Auto_Orders_OrderCode(),N'Chi Hai','Ha Noi',1,'0868299812','sp002','03/01/2022')
+(dbo.Auto_Orders_OrderCode(),'hue2k7')
 
 
--- Thành tiền
-select  orderCode,receiver,addressClient,orders.quantity,phoneNumber,orders.idProduct, orders.dayAdded, orders.quantity*price as 'sumMoney'
-from orders inner join product on orders.idproduct=product.idproduct
+--============Admin=============---
+create table Admin
+(
+  id char(50) primary key,
+  password char(50)
+)
+insert into Admin values
+('AdminHue2k9','AdminHue2k9***')
+
+--============USERS==============
+create table Users(
+   userName char(50) primary key,
+   password char(50),
+   Name nvarchar(max),
+   phoneNumber char(11),
+   address nvarchar(max),
+)
+insert into Users values
+('hue2k9','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội'),
+('hue2k8','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội'),
+('hue2k7','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội')
+create table userOrder
+(
+   userName char(50),
+   idProduct char(10),
+   quantity int,
+   orderCode char(10),
+   constraint Fk_userOrder_orderCode foreign key (orderCode)
+   references orders(orderCode),
+   constraint Fk_userOrder_idProduct foreign key (idProduct)
+   references Product(idProduct),
+   constraint Fk_Users_userName foreign key (userName)
+   references users(userName)
+)
+
+insert into userOrder values 
+('hue2k9','sp001',2,'d001'),
+('hue2k9','sp002',3,'d001'),
+('hue2k9','sp003',2,'d001'),
+('hue2k9','sp004',3,'d001'),
+('hue2k8','sp001',2,'d002'),
+('hue2k7','sp002',3,'d003')
+
+--===========Hien don hang============--
+select userName, nameProduct,userOrder.quantity,orderCode
+from userOrder 
+inner join Product on userOrder.idProduct=Product.idProduct
+where userName='hue2k8' and orderCode='d001'
+
+
+select * from orders where userName='hue2k9'
+
 
 select * from Orders
 select * from Product
 select * from NhanVien
-
