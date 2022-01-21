@@ -113,7 +113,7 @@ public class SQLProcessing {
             ps.setString(3,nv.getGender());
             ps.setString(4,nv.getAddress());
             ps.setInt(5,nv.getTotalDays());
-            ps.setInt(6,nv.getPhoneNumber());
+            ps.setString(6,nv.getPhoneNumber());
           return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -144,7 +144,7 @@ public class SQLProcessing {
                  resultSet.getString(4),
                  resultSet.getString(5),
                  resultSet.getInt(6),
-                 resultSet.getInt(7)
+                 resultSet.getString(7)
                );
                nhanViens.add(nhanVien);
            }
@@ -163,18 +163,17 @@ public class SQLProcessing {
             ps.setString(1,or.getReceiver());
             ps.setString(2,or.getAddress());
             ps.setInt(3,or.getQuantity());
-            ps.setInt(4,or.getPhoneNumber());
+            ps.setString(4,or.getPhoneNumber());
             ps.setString(5,or.getCodeProduct());
             ps.setString(6,or.getDayAdded());
-       //     ps.setInt(7,or.getSumMoney());
         }catch(SQLException e){
             e.printStackTrace();
         }
         return false;
     }
 
-    public static int updateOrder(String orderCode, String receiver, String address, int quantity, int phone, String codeProduct,String dayAdded, int sumMoney){
-        String sqlUpdate="update Orders set price='"+orderCode+"','"+receiver+"','"+address+"','"+quantity+"','"+phone+"','"+codeProduct+"','"+dayAdded+"','"+sumMoney+"'";
+    public static int updateOrder(String orderCode, String receiver, String address, int quantity, String phone, String codeProduct,String dayAdded){
+        String sqlUpdate="update Orders set price='"+orderCode+"','"+receiver+"','"+address+"','"+quantity+"','"+phone+"','"+codeProduct+"','"+dayAdded+"'";
         try{
             return statement.executeUpdate(sqlUpdate);
         }catch (SQLException e){
@@ -202,10 +201,10 @@ public class SQLProcessing {
                   resultSet.getString(2),
                   resultSet.getString(3),
                   resultSet.getInt(4),
-                  resultSet.getInt(5),
+                  resultSet.getString(5),
                   resultSet.getString(6),
                   resultSet.getString(7),
-                  resultSet.getInt(8)
+                        resultSet.getString(8)
                 );
                 orders.add(order);
             }

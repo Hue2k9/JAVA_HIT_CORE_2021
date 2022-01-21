@@ -1,13 +1,17 @@
 package QuanLyBanHang;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+
 public class Order implements Comparable<Order>{
     private String orderCode;
     private String receiver;
     private String address;
     private int quantity;
-    private int phoneNumber;
+    private String phoneNumber;
     private int n;
     ArrayList<Product> listProduct=new ArrayList<>();
     ArrayList<Product> listTempProducts =new ArrayList<>();
@@ -19,7 +23,7 @@ public class Order implements Comparable<Order>{
     public Order() {
     }
 
-    public Order(String orderCode, String receiver, String address,int quantity, int phoneNumber, String codeProduct, String dayAdded, int sumMoney) {
+    public Order(String orderCode, String receiver, String address,int quantity, String phoneNumber, String codeProduct, String dayAdded, int sumMoney) {
         this.orderCode = orderCode;
         this.receiver = receiver;
         this.address = address;
@@ -28,6 +32,9 @@ public class Order implements Comparable<Order>{
         this.codeProduct = codeProduct;
         this.dayAdded = dayAdded;
         this.sumMoney = sumMoney;
+    }
+
+    public Order(String string, String string1, String string2, int anInt, String string3, String string4, String string5, String string6) {
     }
 
     public void setQuantity(int quantity) {
@@ -66,11 +73,11 @@ public class Order implements Comparable<Order>{
         return quantity;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -99,16 +106,25 @@ public class Order implements Comparable<Order>{
     }
 
     public void inputOrder(){
+        String regexPhone = "^[0-9\\-\\+]{9,15}$";
         Scanner sc=new Scanner(System.in);
         System.out.print("Receiver: ");
         receiver=sc.nextLine();
         System.out.print("Address: ");
         address=sc.nextLine();
         System.out.print("Phone number: ");
-        phoneNumber=sc.nextInt();
-        sc.nextLine();
-        System.out.print("Day added: ");
-        dayAdded=sc.nextLine();
+        phoneNumber=sc.nextLine();
+        while(!Pattern.matches(regexPhone,phoneNumber)){
+            System.out.println("Phone number does not exist!");
+            System.out.print("Phone number: ");
+            phoneNumber=sc.nextLine();
+        }
+        //Day added
+        Date date=new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy");
+        String strDate = formatter.format(date);
+        setDayAdded(strDate);
+
         System.out.println("Nhap so loai san pham: ");
         n=sc.nextInt();
         sc.nextLine();
@@ -130,21 +146,19 @@ public class Order implements Comparable<Order>{
             String codeProduct=sc.nextLine();
             for(Product s: products){
                 if (codeProduct.equalsIgnoreCase(s.getIdProduct())){
-                     listTempProducts.add(s);
                     System.out.print("Enter quantity of the product: ");
                     quantity=sc.nextInt();
+                    sc.nextLine();
+                    s.setQuantity(quantity);
                     listQuantity[k]=quantity;
                     k++;
-                   sc.nextLine();
+                    listTempProducts.add(s);
                 }
             }
         }
 
     }
     public void outPutOrder(){
-        for(Product s: listProduct){
-            s.output();
-        }
         sumMoney=0;
         System.out.println("=================================================================================");
         System.out.println("                           BILL                                   ");
@@ -156,10 +170,10 @@ public class Order implements Comparable<Order>{
         int i=0;
         for(Product s: listTempProducts){
             sumMoney+=s.getPrice()*listQuantity[i];
+            System.out.printf("%-15s%-30s%-15d%-15d%-15s\n",s.getIdProduct(),s.getName(),listQuantity[i],s.getPrice(),s.getOrigin());
             i++;
-            System.out.printf("%-15s%-30s%-15s%-15s%-15s\n",s.getIdProduct(),s.getName(),listQuantity[i],s.getPrice(),s.getOrigin());
         }
-        System.out.println("Sum money: "+sumMoney+" VND");
+        System.out.println("Sum money: "+sumMoney+" VNĐ");
         System.out.println("                            Thank you!");
         System.out.println("=================================================================================");
     }

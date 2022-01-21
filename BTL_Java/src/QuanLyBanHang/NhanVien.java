@@ -4,6 +4,8 @@ import java.util.Scanner;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Formatter;
+import java.util.regex.Pattern;
+
 public class NhanVien implements Comparable<NhanVien>{
     private String idStaff;
     private String name;
@@ -11,11 +13,11 @@ public class NhanVien implements Comparable<NhanVien>{
     private String gender;
     private String address;
     private int totalDays; //Tổng số ngày làm việc
-    private int phoneNumber;
+    private String phoneNumber;
     private int salary;
     private ArrayList<String> listStaff = new ArrayList<>();
 
-    public NhanVien(String idStaff, String name, int age, String gender, String address, int totalDays, int phoneNumber) {
+    public NhanVien(String idStaff, String name, int age, String gender, String address, int totalDays, String phoneNumber) {
         this.idStaff = idStaff;
         this.name = name;
         this.age = age;
@@ -41,11 +43,11 @@ public class NhanVien implements Comparable<NhanVien>{
         this.salary = salary;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -119,9 +121,14 @@ public class NhanVien implements Comparable<NhanVien>{
         System.out.print("Total of working days: ");
         totalDays=sc.nextInt();
         sc.nextLine();
-        System.out.println("Phone number: ");
-        phoneNumber=sc.nextInt();
-        sc.nextLine();
+        String regexPhone = "^[0-9\\-\\+]{9,15}$";
+        System.out.print("Phone number: ");
+        phoneNumber=sc.nextLine();
+        while(!Pattern.matches(regexPhone,phoneNumber)){
+            System.out.println("Phone number does not exist!");
+            System.out.print("Phone number: ");
+            phoneNumber=sc.nextLine();
+        }
     }
 
     public void output(){

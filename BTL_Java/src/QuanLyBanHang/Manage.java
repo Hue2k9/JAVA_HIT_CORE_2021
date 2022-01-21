@@ -377,7 +377,7 @@ public class Manage {
                     for(Order or:listOrder){
                         if(orderCode.equalsIgnoreCase(or.getOrderCode())){
                             System.out.print("Enter new phone number: ");
-                            int phoneNumber=sc.nextInt();
+                            String phoneNumber=sc.nextLine();
                             sc.nextLine();
                             or.setPhoneNumber(phoneNumber);
                             System.out.println("Phone number change successful!");
