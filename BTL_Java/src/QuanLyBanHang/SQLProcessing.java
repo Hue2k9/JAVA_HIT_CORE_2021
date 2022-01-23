@@ -16,6 +16,53 @@ public class SQLProcessing {
             e.printStackTrace();
         }
     }
+    public static List<orderCode> readOrderCode(String user, String day){
+        List<orderCode> orderCodes=new ArrayList<>();
+        String sql="select * from Orders where userName='"+user+"' and day='"+day+"'";
+
+        try {
+            ResultSet resultSet=statement.executeQuery(sql);
+            while (resultSet.next()){
+                orderCode order=new orderCode(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3)
+                );
+                orderCodes.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderCodes;
+    }
+
+    public boolean addOrderCode(String user,String day){
+        String sql="insert into Orders(userName,day)"+"values(?,?)";
+        try {
+            PreparedStatement ps=conn.prepareStatement(sql);
+            ps.setString(1,user);
+            ps.setString(2,day);
+            return ps.executeUpdate()>0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean addOrder(Order or,String user){
+        String sql="insert into userOrder(userName,idProduct,quantity,orderCode)"
+                +"values(?,?,?,?)";
+        try {
+            PreparedStatement ps=conn.prepareStatement(sql);
+            ps.setString(1,user);
+            ps.setString(2,or.getCodeProduct());
+            ps.setInt(3,or.getQuantity());
+            ps.setString(4,or.getOrderCode());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static List<Account> readAllAccount(){
         String sql="select * from users";
         List<Account> accounts = new ArrayList<>();

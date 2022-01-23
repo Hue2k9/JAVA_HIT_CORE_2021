@@ -18,9 +18,13 @@ public class RunMain {
         do{
             nv.addAccountToList();
             logIn.addAccountToList();
-            System.out.println("1. Sign in");
-            System.out.println("2. Sign up");
-            System.out.println("3. Exit");
+            System.out.println(" _____________");
+            System.out.println("|             |");
+            System.out.println("|1. Sign in   |");
+            System.out.println("|2. Sign up   |");
+            System.out.println("|3. Exit      |");
+            System.out.println("|             |");
+            System.out.println("|_____________|");
             System.out.print("Enter your choose: ");
             menu1=sc.nextInt();
             switch (menu1){
@@ -166,9 +170,13 @@ public class RunMain {
                                     case 3:{
                                         int choose;
                                         do{
-                                            System.out.println("1. Personal information");
-                                            System.out.println("2. Change information");
-                                            System.out.println("3. Exit");
+                                            System.out.println(" _________________________");
+                                            System.out.println("|                         |");
+                                            System.out.println("|1. Personal information  |");
+                                            System.out.println("|2. Change information    |\n" +
+                                                    "|3. Exit                  |");
+                                            System.out.println("|                         |\n" +
+                                                    "|_________________________|");
                                             System.out.print("Enter your choose: ");
                                             choose=sc.nextInt();
                                             switch (choose){

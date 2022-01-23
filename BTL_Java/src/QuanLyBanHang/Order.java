@@ -1,5 +1,8 @@
 package QuanLyBanHang;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,7 +27,9 @@ public class Order implements Comparable<Order>{
     private  ArrayList<Account> listAccount = new ArrayList<Account>();
     private  ArrayList<Account> listAdmin=new ArrayList<Account>();
     static Connection conn = SqlServerConnection.getJDBCConnection();
+    static Statement statement;
     private Product product=new Product();
+    private ArrayList<orderCode> listOrderCodes=new ArrayList<>();
     public Order() {
     }
 
@@ -129,12 +134,19 @@ public class Order implements Comparable<Order>{
             listAdmin.add(s);
         }
     }
+
     public void inputOrder(String user){
         LogIn logIn=new LogIn();
         Scanner sc=new Scanner(System.in);
+        Date date=new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy");
+        String strDate = formatter.format(date);
+        SimpleDateFormat formatter1 = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+        String strDate1 = formatter1.format(date);
+        setDayAdded(strDate);
         int check=0;
         String regexPhone = "^[0-9\\-\\+]{9,15}$";
-
+        SQLProcessing sql = new SQLProcessing();
         addAccountToList();
         for(Account acc : listAdmin){
             if (acc.getUsername().equalsIgnoreCase(user)){
@@ -149,6 +161,12 @@ public class Order implements Comparable<Order>{
                     System.out.print("Phone number: ");
                     phoneNumber=sc.nextLine();
                 }
+                boolean code=sql.addOrderCode(user,strDate1);
+                List<orderCode> orderCodes=SQLProcessing.readOrderCode(user,strDate1);
+                for(orderCode or : orderCodes){
+                    String day=or.getDay().trim();
+                    setOrderCode(or.getOrderCode());
+                }
                 check=1;
                 break;
             }
@@ -159,21 +177,20 @@ public class Order implements Comparable<Order>{
                     setReceiver(acc.getFullName());
                     setPhoneNumber(acc.getPhone());
                     setAddress(acc.getAddress());
+                    boolean code=sql.addOrderCode(user,strDate1);
+                    List<orderCode> orderCodes=SQLProcessing.readOrderCode(user,strDate1);
+                   for(orderCode or : orderCodes){
+                       String day=or.getDay().trim();
+                       setOrderCode(or.getOrderCode());
+                   }
                     break;
                 }
             }
         }
 
-
-        Date date=new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy");
-        String strDate = formatter.format(date);
-        setDayAdded(strDate);
-
-        System.out.println("Nhap so loai san pham: ");
+        System.out.print("Nhap so loai san pham: ");
         n=sc.nextInt();
         sc.nextLine();
-        SQLProcessing sql=new SQLProcessing();
         List<Product> products=SQLProcessing.readAllProduct();
 
         for(Product s: products){
@@ -200,6 +217,7 @@ public class Order implements Comparable<Order>{
                 }
             }
         }
+
     }
     public void outPutOrder(String user){
         sumMoney=0;
