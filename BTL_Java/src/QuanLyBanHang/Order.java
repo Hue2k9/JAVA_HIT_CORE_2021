@@ -1,4 +1,5 @@
 package QuanLyBanHang;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +20,10 @@ public class Order implements Comparable<Order>{
     private String codeProduct;
     private String dayAdded;
     private int sumMoney;
+    private Account acc=new Account();
+    private  ArrayList<Account> listAccount = new ArrayList<Account>();
+    private  ArrayList<Account> listAdmin=new ArrayList<Account>();
+    static Connection conn = SqlServerConnection.getJDBCConnection();
     private Product product=new Product();
     public Order() {
     }
@@ -104,22 +109,62 @@ public class Order implements Comparable<Order>{
     public void setDayAdded(String dayAdded) {
         this.dayAdded = dayAdded;
     }
-
-    public void inputOrder(){
-        String regexPhone = "^[0-9\\-\\+]{9,15}$";
-        Scanner sc=new Scanner(System.in);
-        System.out.print("Receiver: ");
-        receiver=sc.nextLine();
-        System.out.print("Address: ");
-        address=sc.nextLine();
-        System.out.print("Phone number: ");
-        phoneNumber=sc.nextLine();
-        while(!Pattern.matches(regexPhone,phoneNumber)){
-            System.out.println("Phone number does not exist!");
-            System.out.print("Phone number: ");
-            phoneNumber=sc.nextLine();
+    public void addAccountToList(){
+        List<Account> accounts = SQLProcessing.readAllAccount();
+        accounts=SQLProcessing.readAllAccount();
+        for(Account s : accounts){
+            String userName=s.getUsername().trim();
+            String passWord=s.getPassword().trim();
+            s.setPassword(passWord);
+            s.setUsername(userName);
+            listAccount.add(s);
         }
-        //Day added
+        List<Account> admin= SQLProcessing.readAdminAccount();
+        admin=SQLProcessing.readAdminAccount();
+        for(Account s: admin){
+            String userName=s.getUsername().trim();
+            String passWord=s.getPassword().trim();
+            s.setPassword(passWord);
+            s.setUsername(userName);
+            listAdmin.add(s);
+        }
+    }
+    public void inputOrder(String user){
+        LogIn logIn=new LogIn();
+        Scanner sc=new Scanner(System.in);
+        int check=0;
+        String regexPhone = "^[0-9\\-\\+]{9,15}$";
+
+        addAccountToList();
+        for(Account acc : listAdmin){
+            if (acc.getUsername().equalsIgnoreCase(user)){
+                System.out.print("Receiver: ");
+                receiver=sc.nextLine();
+                System.out.print("Address: ");
+                address=sc.nextLine();
+                System.out.print("Phone number: ");
+                phoneNumber=sc.nextLine();
+                while(!Pattern.matches(regexPhone,phoneNumber)){
+                    System.out.println("Phone number does not exist!");
+                    System.out.print("Phone number: ");
+                    phoneNumber=sc.nextLine();
+                }
+                check=1;
+                break;
+            }
+        }
+        if (check==0){
+            for(Account acc : listAccount){
+                if (acc.getUsername().equalsIgnoreCase(user)){
+                    setReceiver(acc.getFullName());
+                    setPhoneNumber(acc.getPhone());
+                    setAddress(acc.getAddress());
+                    break;
+                }
+            }
+        }
+
+
         Date date=new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy");
         String strDate = formatter.format(date);
@@ -128,7 +173,6 @@ public class Order implements Comparable<Order>{
         System.out.println("Nhap so loai san pham: ");
         n=sc.nextInt();
         sc.nextLine();
-        //Bang san pham
         SQLProcessing sql=new SQLProcessing();
         List<Product> products=SQLProcessing.readAllProduct();
 
@@ -156,15 +200,28 @@ public class Order implements Comparable<Order>{
                 }
             }
         }
-
     }
-    public void outPutOrder(){
+    public void outPutOrder(String user){
         sumMoney=0;
+        int check=0;
         System.out.println("=================================================================================");
         System.out.println("                           BILL                                   ");
-        System.out.println("Order code: "+orderCode);
-        System.out.println("Receiver: "+receiver);
-        System.out.println("Address: "+address+"          Phone number: "+phoneNumber);
+        for(Account acc : listAdmin){
+            if (acc.getUsername().equalsIgnoreCase(user)){
+                System.out.println("Order code: "+orderCode);
+                System.out.println("Receiver: "+receiver);
+                System.out.println("Address: "+address+"          Phone number: "+phoneNumber);
+                break;
+            }
+        }
+        for(Account acc : listAccount){
+            if (acc.getUsername().equalsIgnoreCase(user)){
+                System.out.println("Order code: "+orderCode);
+                System.out.println("Receiver: "+acc.getFullName());
+                System.out.println("Address: "+acc.getAddress()+"          Phone number: "+acc.getPhone());
+                break;
+            }
+        }
         System.out.println("Day added: "+dayAdded);
         System.out.printf("%-15s%-30s%-15s%-15s%-15s\n","Product code","name product","quantity","price","origin");
         int i=0;

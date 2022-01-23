@@ -75,8 +75,9 @@ public class SQLProcessing {
         }
         return false;
     }
-    public static int findAccount(String userName,String password){
-        String sqlFind="select userName from Users where userName='"+userName+"' and password='"+password+"'";
+    /*
+    public static int findAccount(String userName){
+        String sqlFind="select userName from Users where userName='"+userName+"'";
         try {
             return statement.executeUpdate(sqlFind);
         } catch (SQLException e) {
@@ -84,6 +85,8 @@ public class SQLProcessing {
             return -1;
         }
     }
+
+     */
     public static int updateAccount(String userName,String password,String Name, String phoneNumber, String address, String email){
         String sqlUpdate="update Users set password='"+password+"',name=N'"+Name+"' ,phoneNumber='"+phoneNumber+"',address=N'"+address+"',email='"+email+"' where userName='"+userName+"'";
         try {

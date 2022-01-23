@@ -15,7 +15,8 @@ public class LogIn {
      private ArrayList<Account> listAccount = new ArrayList<Account>();
      private String user;
      private ArrayList<Product> listQuantity = new ArrayList<>();
-    static Connection conn = SqlServerConnection.getJDBCConnection();
+     private ArrayList<Account> listAdmin=new ArrayList<Account>();
+     static Connection conn = SqlServerConnection.getJDBCConnection();
     static Statement statement;
     static {
         try {
@@ -24,9 +25,17 @@ public class LogIn {
             e.printStackTrace();
         }
     }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
     public void addAccountToList(){
         List<Account> accounts = SQLProcessing.readAllAccount();
-        accounts=SQLProcessing.readAdminAccount();
+        accounts=SQLProcessing.readAllAccount();
         for(Account s : accounts){
             String userName=s.getUsername().trim();
             String passWord=s.getPassword().trim();
@@ -34,6 +43,23 @@ public class LogIn {
             s.setUsername(userName);
             listAccount.add(s);
         }
+        List<Account> admin= SQLProcessing.readAdminAccount();
+        admin=SQLProcessing.readAdminAccount();
+        for(Account s: admin){
+            String userName=s.getUsername().trim();
+            String passWord=s.getPassword().trim();
+            s.setPassword(passWord);
+            s.setUsername(userName);
+            listAdmin.add(s);
+            listAccount.add(s);
+        }
+    }
+    public int checkAdmin(){
+        for(Account s: listAdmin){
+            if (user.equalsIgnoreCase(s.getUsername()))
+                return 1;
+        }
+        return 0;
     }
     public void SignUp(){
         acc.input();

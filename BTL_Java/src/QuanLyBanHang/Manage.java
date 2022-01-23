@@ -274,9 +274,9 @@ public class Manage {
     }
 
     //Quan ly don hang
-    public void addOrder(){
+    public void addOrder(String user){
         Order or=new Order();
-        or.inputOrder();
+        or.inputOrder(user);
         listOrder.add(or);
         int quantity;
         int check=0;
@@ -303,9 +303,9 @@ public class Manage {
 */
 
     }
-    public void displayOrder(){
+    public void displayOrder(String user){
         for(Order or: listOrder)
-            or.outPutOrder();
+            or.outPutOrder(user);
     }
     public void findAllOrderByAddress(){
         System.out.println("Enter address: ");
