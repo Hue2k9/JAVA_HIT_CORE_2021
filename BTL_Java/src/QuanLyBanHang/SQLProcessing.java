@@ -37,6 +37,27 @@ public class SQLProcessing {
         }
         return accounts;
     }
+    public static List<Account> readAdminAccount(){
+        String sql="select * from Admin";
+        List<Account> accounts = new ArrayList<>();
+        try {
+            ResultSet resultSet=statement.executeQuery(sql);
+            while (resultSet.next()){
+                Account account=new Account(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6)
+                );
+                accounts.add(account);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return accounts;
+    }
     public boolean addAccountToSQL(Account acc){
         String sql="insert into Users(userName,password,name,phoneNumber,address,email)"+
                 "values(?,?,?,?,?,?)";
@@ -63,8 +84,8 @@ public class SQLProcessing {
             return -1;
         }
     }
-    public static int updateAccount(String password,String name, String phoneNumber, String address, String email){
-        String sqlUpdate="update Users set password='"+password+"', phoneNumber='"+phoneNumber+"',address='"+address+"',email='"+email+"'";
+    public static int updateAccount(String userName,String password,String Name, String phoneNumber, String address, String email){
+        String sqlUpdate="update Users set password='"+password+"',name=N'"+Name+"' ,phoneNumber='"+phoneNumber+"',address=N'"+address+"',email='"+email+"' where userName='"+userName+"'";
         try {
             return statement.executeUpdate(sqlUpdate);
         } catch (SQLException e) {

@@ -106,11 +106,13 @@ create table Users(
    Name nvarchar(max),
    phoneNumber char(11),
    address nvarchar(max),
+   email char(100)
 )
+
 insert into Users values
-('hue2k9','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội'),
-('hue2k8','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội'),
-('hue2k7','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội')
+('hue2k9','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội',''),
+('hue2k8','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội',''),
+('hue2k7','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội','')
 create table userOrder
 (
    userName char(50),
@@ -141,8 +143,17 @@ where userName='hue2k8' and orderCode='d001'
 
 
 select * from orders where userName='hue2k9'
-
-
+select * from userOrder
 select * from Orders
 select * from Product
 select * from NhanVien
+select * from users
+select * from Admin
+
+
+
+
+
+
+
+
