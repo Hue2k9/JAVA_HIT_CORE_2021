@@ -1,5 +1,7 @@
 package QuanLyBanHang;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.Formatter;
 public class Product  implements Comparable<Product> {
@@ -83,9 +85,14 @@ public class Product  implements Comparable<Product> {
         System.out.print("Price: ");
         price=sc.nextInt();
         sc.nextLine();
+        Date date=new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy");
+        String strDate = formatter.format(date);
+        dayAdded=strDate;
+        /*
         System.out.print("Day added: ");
         dayAdded=sc.nextLine();
-
+  */
         System.out.print("Origin: ");
         origin=sc.nextLine();
     }

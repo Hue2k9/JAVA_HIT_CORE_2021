@@ -92,13 +92,14 @@ insert into Orders values
 alter table orders add day char(25)
 --============Admin=============---
 create table Admin(
-   userName char(10) primary key,
+   userName char(50) primary key,
    password char(50),
    name nvarchar(max),
    phoneNumber char(11),
    address nvarchar(max),
    email char(100)
 )
+
 insert into Admin values
 ('Admin01','Admin01***','','','','')
 
@@ -116,6 +117,9 @@ insert into Users values
 ('hue2k9','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội',''),
 ('hue2k8','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội',''),
 ('hue2k7','Doanxem2k9***',N'Hoàng Minh Huệ','0868299812',N'Hà Nội','')
+
+
+
 create table userOrder
 (
    userName char(50),
@@ -126,11 +130,19 @@ create table userOrder
    references orders(orderCode),
    constraint Fk_userOrder_idProduct foreign key (idProduct)
    references Product(idProduct),
-   constraint Fk_Users_userName foreign key (userName)
-   references users(userName)
+  
 )
+alter table userOrder
+drop constraint Fk_userOrder_idProduct
+select userName from admin 
+union 
+select userName from users
 
+alter table userOrder 
+add constraint Fk_UserOrder_admin foreign key (userName)
+references Admin(userName)
 insert into userOrder values 
+('Admin01','sp001',5,'d001'),
 ('hue2k9','sp001',2,'d001'),
 ('hue2k9','sp002',3,'d001'),
 ('hue2k9','sp003',2,'d001'),
@@ -138,12 +150,21 @@ insert into userOrder values
 ('hue2k8','sp001',2,'d002'),
 ('hue2k7','sp002',3,'d003')
 
---===========Hien don hang============--
-select userName, nameProduct,userOrder.quantity,orderCode
-from userOrder 
-inner join Product on userOrder.idProduct=Product.idProduct
-where userName='hue2k9' and orderCode='d001'
 
+--===========Hien don hang============--
+--User
+select UserOrder.userName, Product.idProduct,Product.nameProduct,userOrder.quantity,userOrder.orderCode,price,day 
+from userOrder inner join Product 
+on userOrder.idProduct=Product.idProduct
+inner join Orders on userOrder.orderCode=Orders.orderCode
+where UserOrder.userName='hue2k9'
+-- Admin
+select UserOrder.userName,users.name,users.address,users.phoneNumber, Product.idProduct,Product.nameProduct,userOrder.quantity,userOrder.orderCode,price,day 
+from userOrder inner join Product 
+on userOrder.idProduct=Product.idProduct
+inner join Orders on userOrder.orderCode=Orders.orderCode
+inner join users on userOrder.userName=Users.userName
+where users.address like N'%Hà Nội%'
 
 select * from orders where userName='hue2k9'
 select * from userOrder
@@ -152,11 +173,11 @@ select * from Product
 select * from NhanVien
 select * from users
 select * from Admin
-select orderCode from Orders where
+select orderCode from Orders
 
 
+select idProduct,quantity from userOrder where username='hue2k9' and orderCode='d027'
 
-
-
+select * from userOrder
 
 

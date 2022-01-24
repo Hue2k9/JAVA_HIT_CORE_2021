@@ -88,7 +88,7 @@ public class LogIn {
         for(Account acc:listAccount){
             if(acc.getUsername().equalsIgnoreCase(userName)){
                 if(acc.getPassword().equals(passWord)){
-                    System.out.println("=====Hello "+acc.getFullName()+"!=====");
+                    System.out.println("=====  Hello "+acc.getFullName()+" !=====");
                     user=acc.getUsername();
                     return 1;
                 }

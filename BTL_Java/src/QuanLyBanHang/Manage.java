@@ -281,7 +281,7 @@ public class Manage {
         int quantity;
         int check=0;
         SQLProcessing sql=new SQLProcessing();
-
+         or.outPutOrder(user);
         /*
         if(sql.addOrderToSQL(or)){
             System.out.println("Add order successed!");
@@ -311,10 +311,8 @@ public class Manage {
         System.out.println("Enter address: ");
         Scanner sc=new Scanner(System.in);
         String address=sc.nextLine();
-        for(Order or:listOrder){
-            if (address.equalsIgnoreCase(or.getAddress()))
-                System.out.println(or);
-        }
+        Order order=new Order();
+        order.displayOrderByAddress(address);
     }
     public void deleteOrder(){
         Scanner sc=new Scanner(System.in);

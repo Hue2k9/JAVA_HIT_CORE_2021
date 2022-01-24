@@ -308,6 +308,135 @@ public class Order implements Comparable<Order>{
 
     }
     public void displayOrderByAdmin(){
+        String sqlselect="select UserOrder.userName,users.name,users.address,users.phoneNumber, Product.idProduct,Product.nameProduct,userOrder.quantity,userOrder.orderCode,price,day \n" +
+                "from userOrder inner join Product \n" +
+                "on userOrder.idProduct=Product.idProduct\n" +
+                "inner join Orders on userOrder.orderCode=Orders.orderCode\n" +
+                "inner join users on userOrder.userName=Users.userName";
+        String sql="select * from userOrder";
+        String s;
+        int sumMoney=0;
+        ResultSet resultSet;
+        Statement statement= null;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            resultSet = statement.executeQuery(sqlselect);
+            int k=1;
+            ArrayList<String> orderCodes=new ArrayList<>();
+            String temp = null;
+            while (resultSet.next()){
+                String s1=resultSet.getString("nameProduct");
+                int s2=resultSet.getInt("quantity");
+                int s3=resultSet.getInt("price");
+                String s4=resultSet.getString("day");
+                String s5=resultSet.getString("userName");
+                String s6=resultSet.getString("name");
+                String s7=resultSet.getString("address");
+                String s8=resultSet.getString("phoneNumber");
+                s=resultSet.getString("orderCode");
+                if(k==1){
+                    System.out.println("Order code: "+s);
+                    System.out.println("Day: "+s4);
+                    System.out.println("Account: "+s5);
+                    System.out.println("Name: "+s6);
+                    System.out.println("Address: "+s7);
+                    System.out.println("Phone number: "+s8);
+                    System.out.printf("%-30s%-20s%-20s\n","Name product","Quantity","Price");
+                    temp=s;
+                    k=0;
+                }
+                if(!s.equals(temp)){
+                    System.out.println("Sum money: "+sumMoney);
+                    System.out.println("---------------------------------------------------------");
+                    System.out.println("Order code: "+s);
+                    System.out.println("Day: "+s4);
+                    System.out.println("Account: "+s5);
+                    System.out.println("Name: "+s6);
+                    System.out.println("Address: "+s7);
+                    System.out.println("Phone number: "+s8);
+                    System.out.printf("%-30s%-20s%-20s\n","Name product","Quantity","Price");
+                    temp=s;
+                    sumMoney=0;
+                }
+                sumMoney+=s3;
+                System.out.printf("%-30s%-20d%-20d\n",s1,s2,s3);
+            }
+            System.out.println("Sum money: "+sumMoney);
+            System.out.println("---------------------------------------------------------");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void displayOrderByAddress(String address){
+        String sqlselect="select UserOrder.userName,users.name,users.address,users.phoneNumber, Product.idProduct,Product.nameProduct,userOrder.quantity,userOrder.orderCode,price,day \n" +
+                "from userOrder inner join Product \n" +
+                "on userOrder.idProduct=Product.idProduct\n" +
+                "inner join Orders on userOrder.orderCode=Orders.orderCode\n" +
+                "inner join users on userOrder.userName=Users.userName\n" +
+                "where address like N'%"+address+"%'";
+        String s;
+        int sumMoney=0;
+        ResultSet resultSet;
+        Statement statement= null;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            resultSet = statement.executeQuery(sqlselect);
+            System.out.println(resultSet);
+            int k=1;
+            ArrayList<String> orderCodes=new ArrayList<>();
+            String temp = null;
+            while (resultSet.next()){
+                String s1=resultSet.getString("nameProduct");
+                int s2=resultSet.getInt("quantity");
+                int s3=resultSet.getInt("price");
+                String s4=resultSet.getString("day");
+                String s5=resultSet.getString("userName");
+                String s6=resultSet.getString("name");
+                String s7=resultSet.getString("address");
+                String s8=resultSet.getString("phoneNumber");
+                s=resultSet.getString("orderCode");
+                if(k==1){
+                    System.out.println("Order code: "+s);
+                    System.out.println("Day: "+s4);
+                    System.out.println("Account: "+s5);
+                    System.out.println("Name: "+s6);
+                    System.out.println("Address: "+s7);
+                    System.out.println("Phone number: "+s8);
+                    System.out.printf("%-30s%-20s%-20s\n","Name product","Quantity","Price");
+                    temp=s;
+                    k=0;
+                }
+                if(!s.equals(temp)){
+                    System.out.println("Sum money: "+sumMoney);
+                    System.out.println("---------------------------------------------------------");
+                    System.out.println("Order code: "+s);
+                    System.out.println("Day: "+s4);
+                    System.out.println("Account: "+s5);
+                    System.out.println("Name: "+s6);
+                    System.out.println("Address: "+s7);
+                    System.out.println("Phone number: "+s8);
+                    System.out.printf("%-30s%-20s%-20s\n","Name product","Quantity","Price");
+                    temp=s;
+                    sumMoney=0;
+                }
+                sumMoney+=s3;
+                System.out.printf("%-30s%-20d%-20d\n",s1,s2,s3);
+            }
+            System.out.println("Sum money: "+sumMoney);
+            System.out.println("---------------------------------------------------------");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
     @Override

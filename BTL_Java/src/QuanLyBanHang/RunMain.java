@@ -384,7 +384,8 @@ public class RunMain {
                                                     break;
                                                 }
                                                 case 5:{
-                                                    nv.displayOrder(user);
+                                                   // nv.displayOrder(user);
+                                                    order.displayOrderByAdmin();
                                                     break;
                                                 }
                                                 case 6:{
