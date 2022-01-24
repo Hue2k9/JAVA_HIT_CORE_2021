@@ -89,7 +89,7 @@ insert into Orders values
 insert into Orders values
 (dbo.Auto_Orders_OrderCode(),'hue2k7')
 
-
+alter table orders add day char(25)
 --============Admin=============---
 create table Admin(
    userName char(10) primary key,
@@ -142,7 +142,7 @@ insert into userOrder values
 select userName, nameProduct,userOrder.quantity,orderCode
 from userOrder 
 inner join Product on userOrder.idProduct=Product.idProduct
-where userName='hue2k8' and orderCode='d001'
+where userName='hue2k9' and orderCode='d001'
 
 
 select * from orders where userName='hue2k9'
@@ -152,7 +152,7 @@ select * from Product
 select * from NhanVien
 select * from users
 select * from Admin
-
+select orderCode from Orders where
 
 
 

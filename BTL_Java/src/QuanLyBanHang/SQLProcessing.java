@@ -35,7 +35,6 @@ public class SQLProcessing {
         }
         return orderCodes;
     }
-
     public boolean addOrderCode(String user,String day){
         String sql="insert into Orders(userName,day)"+"values(?,?)";
         try {
@@ -48,15 +47,17 @@ public class SQLProcessing {
         }
         return false;
     }
-    public boolean addOrder(Order or,String user){
+
+    public boolean addOrder(String user,String codeProduct,int quantity, String orderCode){
         String sql="insert into userOrder(userName,idProduct,quantity,orderCode)"
                 +"values(?,?,?,?)";
         try {
             PreparedStatement ps=conn.prepareStatement(sql);
             ps.setString(1,user);
-            ps.setString(2,or.getCodeProduct());
-            ps.setInt(3,or.getQuantity());
-            ps.setString(4,or.getOrderCode());
+            ps.setString(2,codeProduct);
+            ps.setInt(3,quantity);
+            ps.setString(4,orderCode);
+            return ps.executeUpdate()>0;
         } catch (SQLException e) {
             e.printStackTrace();
         }

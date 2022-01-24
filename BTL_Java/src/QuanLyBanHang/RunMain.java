@@ -160,7 +160,8 @@ public class RunMain {
                                                     break;
                                                 }
                                                 case 3:{
-                                                    nv.displayOrder(user);
+                                                  //  nv.displayOrder(user);
+                                                    order.displayOrderListOfUser(user);
                                                     break;
                                                 }
                                             }

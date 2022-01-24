@@ -27,7 +27,7 @@ public class Order implements Comparable<Order>{
     private  ArrayList<Account> listAccount = new ArrayList<Account>();
     private  ArrayList<Account> listAdmin=new ArrayList<Account>();
     static Connection conn = SqlServerConnection.getJDBCConnection();
-    static Statement statement;
+
     private Product product=new Product();
     private ArrayList<orderCode> listOrderCodes=new ArrayList<>();
     public Order() {
@@ -139,7 +139,7 @@ public class Order implements Comparable<Order>{
         LogIn logIn=new LogIn();
         Scanner sc=new Scanner(System.in);
         Date date=new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy hh:mm");
         String strDate = formatter.format(date);
         SimpleDateFormat formatter1 = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
         String strDate1 = formatter1.format(date);
@@ -214,6 +214,8 @@ public class Order implements Comparable<Order>{
                     listQuantity[k]=quantity;
                     k++;
                     listTempProducts.add(s);
+                    boolean add=sql.addOrder(user,s.getIdProduct(),quantity,orderCode);
+
                 }
             }
         }
@@ -223,7 +225,7 @@ public class Order implements Comparable<Order>{
         sumMoney=0;
         int check=0;
         System.out.println("=================================================================================");
-        System.out.println("                           BILL                                   ");
+        System.out.println("                                    BILL                                   ");
         for(Account acc : listAdmin){
             if (acc.getUsername().equalsIgnoreCase(user)){
                 System.out.println("Order code: "+orderCode);
@@ -249,10 +251,65 @@ public class Order implements Comparable<Order>{
             i++;
         }
         System.out.println("Sum money: "+sumMoney+" VNĐ");
-        System.out.println("                            Thank you!");
+        System.out.println("                                    Thank you!                                   ");
         System.out.println("=================================================================================");
     }
+    public void displayOrderListOfUser(String user){
+        String sqlselect="select UserOrder.userName, Product.idProduct,Product.nameProduct,userOrder.quantity,userOrder.orderCode,price,day \n" +
+                "from userOrder inner join Product \n" +
+                "on userOrder.idProduct=Product.idProduct\n" +
+                "inner join Orders on userOrder.orderCode=Orders.orderCode\n" +
+                "where UserOrder.userName='"+user+"'";
+        String sql="select * from userOrder";
+        String s;
+        int sumMoney=0;
+        ResultSet resultSet;
+        Statement statement= null;
+        try {
+            statement = conn.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            resultSet = statement.executeQuery(sqlselect);
+            int k=1;
+            ArrayList<String> orderCodes=new ArrayList<>();
+            String temp = null;
+            while (resultSet.next()){
+                String s1=resultSet.getString("nameProduct");
+                int s2=resultSet.getInt("quantity");
+                int s3=resultSet.getInt("price");
+                String s4=resultSet.getString("day");
+                s=resultSet.getString("orderCode");
+                if(k==1){
+                    System.out.println("Order code: "+s);
+                    System.out.println("Day: "+s4);
+                    System.out.printf("%-30s%-20s%-20s\n","Name product","Quantity","Price");
+                    temp=s;
+                    k=0;
+                }
+                if(!s.equals(temp)){
+                    System.out.println("Sum money: "+sumMoney);
+                    System.out.println("---------------------------------------------------------");
+                    System.out.println("Order code: "+s);
+                    System.out.println("Day: "+s4);
+                    System.out.printf("%-30s%-20s%-20s\n","Name product","Quantity","Price");
+                    temp=s;
+                    sumMoney=0;
+                }
+                sumMoney+=s3;
+                System.out.printf("%-30s%-20d%-20d\n",s1,s2,s3);
+            }
+            System.out.println("Sum money: "+sumMoney);
+            System.out.println("---------------------------------------------------------");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+    }
+    public void displayOrderByAdmin(){
+
+    }
     @Override
     public String toString() {
         return "Order{" +
